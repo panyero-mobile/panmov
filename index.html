@@ -50,6 +50,16 @@
     <div class="page-content" page-content></div>
   </main>
 
+  <!-- JavaScript -->
+  <script src="./assets/js/global.js"></script>
+  <script type="module" src="./assets/js/index.js"></script>
+  <script>
+    // Add active class to the correct nav item
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.bottom-nav a[href="./index.html"]').classList.add('active');
+    });
+  </script>
+  <!-- Include bottom navigation -->
   <!-- Bottom Navigation -->
   <nav class="bottom-nav">
     <a href="./index.html" class="nav-item active">
@@ -83,10 +93,5 @@
       <span>Profile</span>
     </a>
   </nav>
-
-  <!-- JavaScript -->
-  <script src="./assets/js/global.js"></script>
-  <script type="module" src="./assets/js/index.js"></script>
 </body>
 </html>
-
