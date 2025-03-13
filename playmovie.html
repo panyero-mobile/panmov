@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Now Playing - Panyero</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+    }
+    
+    .video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    iframe {
+      width: 100vw;
+      height: 56.25vw; /* 16:9 aspect ratio */
+      max-height: 100vh;
+      max-width: 177.78vh; /* 16:9 aspect ratio */
+      border: none;
+    }
+    
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+    }
+    
+    .logo-text {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #E50914;
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+    }
+
+    .loading-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      color: white;
+      z-index: 5;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #E50914;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .fade-out {
+      opacity: 0;
+      transition: opacity 1s;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <button class="back-button" onclick="window.history.back()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+    <div class="logo-text">PANYERO</div>
+    <iframe id="movieFrame" allowfullscreen allow="autoplay; fullscreen" crossorigin="anonymous"></iframe>
+  </div>
+
+  <script>
+    window.onload = function() {
+      let streamURL = localStorage.getItem("streamURL");
+      const movieId = localStorage.getItem("movieId");
+      
+      // If streamURL is not set but we have a movieId, create the streamURL
+      if (!streamURL && movieId) {
+        streamURL = `https://vidsrc.xyz/embed/movie/${movieId}`;
+        localStorage.setItem("streamURL", streamURL);
+      }
+      
+      if (streamURL) {
+        // Add loading indicator
+        const loadingIndicator = document.createElement('div');
+        loadingIndicator.className = 'loading-indicator';
+        loadingIndicator.innerHTML = `
+          <div class="spinner"></div>
+          <p>Loading your movie...</p>
+        `;
+        document.querySelector('.video-container').appendChild(loadingIndicator);
+        
+        // Set the iframe source
+        const movieFrame = document.getElementById("movieFrame");
+        movieFrame.src = streamURL;
+        
+        // Remove loading indicator when iframe loads
+        movieFrame.onload = function() {
+          const indicator = document.querySelector('.loading-indicator');
+          if (indicator) {
+            indicator.classList.add('fade-out');
+            setTimeout(() => indicator.remove(), 1000);
+          }
+        };
+      } else {
+        document.body.innerHTML = '<p style="color: white; text-align: center; margin-top: 50vh; transform: translateY(-50%);">Stream URL not found. Please go back and try again.</p>';
+      }
+    };
+    
+    // Function to set stream URL (used by detail.js)
+    function setStreamURL(movieId) {
+      localStorage.setItem("streamURL", `https://vidsrc.xyz/embed/movie/${movieId}`);
+    }
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panyero</title>
+  <link rel="stylesheet" href="./assets/css/splash.css">
+  <!-- Preload the audio file -->
+  <link rel="preload" href="https://firebasestorage.googleapis.com/v0/b/aitek2023-8f504.appspot.com/o/moken%2Fmoken_bgm%20(1).mp3?alt=media&token=df7e96f4-d522-44d5-a821-3dfa3f529145" as="audio">
+</head>
+<body>
+  <div class="splash-container">
+    <div class="netflix-logo">PANYERO</div>
+    <div class="loading-bar"></div>
+  </div>
+  
+  <audio id="intro-sound" autoplay muted playsinline>
+    <source src="https://firebasestorage.googleapis.com/v0/b/aitek2023-8f504.appspot.com/o/moken%2Fmoken_bgm%20(1).mp3?alt=media&token=df7e96f4-d522-44d5-a821-3dfa3f529145" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  
+  <script>
+  // Try to play audio immediately when the page starts loading
+  window.addEventListener('load', function() {
+    const audio = document.getElementById('intro-sound');
+    
+    // First try: play muted (more likely to succeed with autoplay policies)
+    audio.muted = true;
+    audio.play().then(() => {
+      // If successful, unmute after a short delay
+      setTimeout(() => {
+        audio.muted = false;
+        audio.volume = 0.7;
+      }, 100);
+    }).catch(error => {
+      console.log('Initial autoplay failed:', error);
+      
+      // Second try: play with user interaction
+      document.addEventListener('click', () => {
+        audio.muted = false;
+        audio.volume = 0.7;
+        audio.play().catch(e => console.log('Audio play failed after click:', e));
+      }, { once: true });
+    });
+    
+    // Redirect to index.html after 5 seconds
+    setTimeout(() => {
+      // Fade out audio before redirecting
+      const fadeAudio = setInterval(() => {
+        if (audio.volume > 0.1) {
+          audio.volume -= 0.1;
+        } else {
+          clearInterval(fadeAudio);
+          audio.pause();
+          
+          // Redirect to index.html
+          window.location.href = 'index.html';
+        }
+      }, 100);
+    }, 5000);
+  });
+  
+  // Backup method: try to play on DOMContentLoaded as well
+  document.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('intro-sound');
+    if (audio.paused) {
+      audio.muted = true;
+      audio.play().then(() => {
+        setTimeout(() => {
+          audio.muted = false;
+          audio.volume = 0.7;
+        }, 100);
+      }).catch(e => console.log('DOMContentLoaded play attempt failed:', e));
+    }
+  });
+</script>
+</body>
+</html>
+

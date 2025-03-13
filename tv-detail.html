@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TV Show Details - Panyero</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <a href="./index.html" class="logo-text">PANYERO</a>
+    <div class="header-actions">
+      <button class="search-btn" search-toggler>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+      <div class="profile-avatar">
+        <span>P</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Search Modal -->
+    <div class="search-modal" search-modal>
+      <div class="search-header">
+        <button class="search-close" search-toggler>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <input type="text" class="search-input" placeholder="Search for TV shows..." search-field>
+      </div>
+      <div class="search-results" grid-list></div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="page-content" page-content></div>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="./index.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"></path>
+      </svg>
+      <span>Movies</span>
+    </a>
+    <a href="./tv-shows.html" class="nav-item active">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"></path>
+      </svg>
+      <span>TV Series</span>
+    </a>
+    <a href="./music.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"></path>
+      </svg>
+      <span>Music</span>
+    </a>
+    <a href="./categories.html" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"></path>
+      </svg>
+      <span>Categories</span>
+    </a>
+    <a href="#" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path>
+      </svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- JavaScript -->
+  <script src="./assets/js/global.js"></script>
+  <script type="module" src="./assets/js/tv-detail.js"></script>
+</body>
+</html>
+

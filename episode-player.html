@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch Episode - Panyero</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+    }
+    
+    .video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    iframe {
+      width: 100vw;
+      height: 56.25vw; /* 16:9 aspect ratio */
+      max-height: 100vh;
+      max-width: 177.78vh; /* 16:9 aspect ratio */
+      border: none;
+    }
+    
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+    }
+    
+    .logo-text {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #E50914;
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+    }
+
+    .loading-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      color: white;
+      z-index: 5;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #E50914;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .fade-out {
+      opacity: 0;
+      transition: opacity 1s;
+    }
+
+    .episode-info {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 15px;
+      border-radius: 5px;
+      max-width: 80%;
+      z-index: 10;
+      transition: opacity 0.3s;
+    }
+
+    .episode-info.hidden {
+      opacity: 0;
+    }
+
+    .episode-title {
+      font-size: 1.2rem;
+      margin: 0 0 5px 0;
+    }
+
+    .episode-meta {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <button class="back-button" onclick="window.history.back()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 12H5M12 19l-7-7 7-7"></path>
+      </svg>
+    </button>
+    <div class="logo-text">PANYERO</div>
+    <iframe id="episodeFrame" allowfullscreen allow="autoplay; fullscreen" crossorigin="anonymous"></iframe>
+    
+    <div class="episode-info" id="episodeInfo">
+      <h3 class="episode-title" id="episodeTitle">Loading...</h3>
+      <div class="episode-meta" id="episodeMeta">Season 0, Episode 0</div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      const streamURL = localStorage.getItem("streamURL");
+      const episodeTitle = localStorage.getItem("episodeTitle") || "Episode";
+      const seasonNumber = localStorage.getItem("seasonNumber") || "0";
+      const episodeNumber = localStorage.getItem("episodeNumber") || "0";
+      const showTitle = localStorage.getItem("showTitle") || "Show";
+      
+      // Update episode info
+      document.getElementById("episodeTitle").textContent = episodeTitle;
+      document.getElementById("episodeMeta").textContent = `${showTitle} - Season ${seasonNumber}, Episode ${episodeNumber}`;
+      document.title = `${episodeTitle} - ${showTitle} - Panyero`;
+      
+      if (streamURL) {
+        // Add loading indicator
+        const loadingIndicator = document.createElement('div');
+        loadingIndicator.className = 'loading-indicator';
+        loadingIndicator.innerHTML = `
+          <div class="spinner"></div>
+          <p>Loading your episode...</p>
+        `;
+        document.querySelector('.video-container').appendChild(loadingIndicator);
+        
+        // Set the iframe source
+        const episodeFrame = document.getElementById("episodeFrame");
+        episodeFrame.src = streamURL;
+        
+        // Remove loading indicator when iframe loads
+        episodeFrame.onload = function() {
+          const indicator = document.querySelector('.loading-indicator');
+          if (indicator) {
+            indicator.classList.add('fade-out');
+            setTimeout(() => indicator.remove(), 1000);
+          }
+        };
+
+        // Hide episode info after 5 seconds
+        setTimeout(() => {
+          document.getElementById("episodeInfo").classList.add("hidden");
+        }, 5000);
+
+        // Show episode info on mouse movement
+        document.addEventListener("mousemove", () => {
+          const infoElement = document.getElementById("episodeInfo");
+          infoElement.classList.remove("hidden");
+          
+          // Hide again after 3 seconds
+          clearTimeout(window.infoTimeout);
+          window.infoTimeout = setTimeout(() => {
+            infoElement.classList.add("hidden");
+          }, 3000);
+        });
+      } else {
+        document.body.innerHTML = '<p style="color: white; text-align: center; margin-top: 50vh; transform: translateY(-50%);">Stream URL not found. Please go back and try again.</p>';
+      }
+    };
+  </script>
+</body>
+</html>
+
